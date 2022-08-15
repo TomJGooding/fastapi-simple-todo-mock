@@ -56,7 +56,7 @@ To add a screenshot, create an `assets/images` folder in your repository and upl
     ```
 ## Acknowledgements
 
-- The [https://realpython.com/courses/python-rest-apis-with-fastapi/](Python REST APIs With FastAPI) video course by Real Python for getting started with FastAPI
+- The [Python REST APIs With FastAPI](https://realpython.com/courses/python-rest-apis-with-fastapi/) video course by Real Python for getting started with FastAPI
 
 ## Licence
 
