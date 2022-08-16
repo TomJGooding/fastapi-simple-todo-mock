@@ -1,4 +1,9 @@
 from fastapi import FastAPI
+from mongita import MongitaClientDisk
+
+client = MongitaClientDisk()
+db = client.db
+todos = db.todos
 
 app = FastAPI()
 
