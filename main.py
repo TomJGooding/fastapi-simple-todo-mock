@@ -1,12 +1,20 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from mongita import MongitaClientDisk
 from pydantic import BaseModel
 
-client = MongitaClientDisk()
-db = client.db
-todos = db.todos
-
 app = FastAPI()
+
+db_client = MongitaClientDisk()
+db = db_client.db
+
+
+# Dependency
+def get_todos_db():
+    todos = db.todos
+    return todos
+
+
+print(type(get_todos_db()))
 
 
 class ToDoItem(BaseModel):
@@ -21,7 +29,7 @@ async def root():
 
 
 @app.post("/todos", response_model=ToDoItem)
-async def create_todo_item(new_todo: ToDoItem):
+async def create_todo_item(new_todo: ToDoItem, todos=Depends(get_todos_db)):
     if todos.count_documents({"id": new_todo.id}) > 0:
         raise HTTPException(
             status_code=400,
