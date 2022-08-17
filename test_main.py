@@ -1,6 +1,24 @@
 from fastapi.testclient import TestClient
+from main import app, get_todos_db, db
 
-from main import app
+
+# Setup: Override dependency during testing
+def setup_module():
+    app.dependency_overrides[get_todos_db] = override_get_todos_db
+
+
+# Teardown: Drop test_todos database after tests have run
+def teardown_module():
+    def drop_test_todos_db() -> None:
+        db.drop_collection("test_todos")
+
+    drop_test_todos_db()
+
+
+def override_get_todos_db():
+    test_todos = db.test_todos
+    return test_todos
+
 
 client = TestClient(app)
 
