@@ -116,6 +116,16 @@ def test_update_todo_item_returns_200_status_and_correct_response():
     }
 
 
+def test_update_todo_item_actually_updates_database():
+    response = client.get("/todos/1")
+    assert response.status_code == 200
+    assert response.json() == {
+        "id": 1,
+        "title": "UPDATED Task One",
+        "complete": True,
+    }
+
+
 def test_update_todo_item_inexistent_id_returns_404_status_and_error():
     response = client.put(
         "/todos/99",
