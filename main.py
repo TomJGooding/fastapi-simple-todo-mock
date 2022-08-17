@@ -37,6 +37,16 @@ async def get_all_todos(todos=Depends(get_todos_db)):
     ]
 
 
+@app.get("/todos/{todo_id}", response_model=ToDoItem)
+async def get_todo_item_by_id(todo_id: int, todos=Depends(get_todos_db)):
+    if todos.count_documents({"id": todo_id}) < 1:
+        raise HTTPException(
+            status_code=404, detail=f"No to-do item with id {todo_id} found"
+        )
+    todo_item = todos.find_one({"id": todo_id})
+    return {key: todo_item[key] for key in todo_item if key != "_id"}
+
+
 @app.post("/todos", response_model=ToDoItem)
 async def create_todo_item(new_todo: ToDoItem, todos=Depends(get_todos_db)):
     if todos.count_documents({"id": new_todo.id}) > 0:

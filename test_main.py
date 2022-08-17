@@ -79,3 +79,21 @@ def test_get_all_todos_returns_200_status_and_json_response():
             "complete": False,
         },
     ]
+
+
+def test_get_todo_item_by_id_returns_200_status_and_correct_response():
+    response = client.get("/todos/2")
+    assert response.status_code == 200
+    assert response.json() == {
+        "id": 2,
+        "title": "Task Two",
+        "complete": False,
+    }
+
+
+def test_get_todo_item_by_inexistent_id_returns_400_status_and_error():
+    response = client.get("/todos/99")
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "No to-do item with id 99 found",
+    }
