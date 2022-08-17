@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import Depends, FastAPI, HTTPException
 from mongita import MongitaClientDisk
 from pydantic import BaseModel
 
@@ -26,6 +26,15 @@ class ToDoItem(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/todos", response_model=list[ToDoItem])
+async def get_all_todos(todos=Depends(get_todos_db)):
+    all_todos = todos.find({})
+    return [
+        {key: todo_item[key] for key in todo_item if key != "_id"}
+        for todo_item in all_todos
+    ]
 
 
 @app.post("/todos", response_model=ToDoItem)
