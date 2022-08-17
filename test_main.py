@@ -91,8 +91,40 @@ def test_get_todo_item_by_id_returns_200_status_and_correct_response():
     }
 
 
-def test_get_todo_item_by_inexistent_id_returns_400_status_and_error():
+def test_get_todo_item_by_inexistent_id_returns_404_status_and_error():
     response = client.get("/todos/99")
+    assert response.status_code == 404
+    assert response.json() == {
+        "detail": "No to-do item with id 99 found",
+    }
+
+
+def test_update_todo_item_returns_200_status_and_correct_response():
+    response = client.put(
+        "/todos/1",
+        json={
+            "id": 1,
+            "title": "UPDATED Task One",
+            "complete": True,
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "id": 1,
+        "title": "UPDATED Task One",
+        "complete": True,
+    }
+
+
+def test_update_todo_item_inexistent_id_returns_404_status_and_error():
+    response = client.put(
+        "/todos/99",
+        json={
+            "id": 99,
+            "title": "INEXISTENT TASK!",
+            "complete": True,
+        },
+    )
     assert response.status_code == 404
     assert response.json() == {
         "detail": "No to-do item with id 99 found",

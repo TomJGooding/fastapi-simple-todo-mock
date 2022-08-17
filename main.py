@@ -56,3 +56,15 @@ async def create_todo_item(new_todo: ToDoItem, todos=Depends(get_todos_db)):
         )
     todos.insert_one(new_todo.dict())
     return new_todo
+
+
+@app.put("/todos/{todo_id}", response_model=ToDoItem)
+async def update_todo_item(
+    todo_id: int, updated_todo: ToDoItem, todos=Depends(get_todos_db)
+):
+    if todos.count_documents({"id": todo_id}) < 1:
+        raise HTTPException(
+            status_code=404, detail=f"No to-do item with id {todo_id} found"
+        )
+    todos.replace_one({"id": todo_id}, updated_todo.dict())
+    return updated_todo
