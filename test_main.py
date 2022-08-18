@@ -30,7 +30,7 @@ def test_root_returns_200_status_and_json_response():
     assert response.json() == {"message": "Hello World"}
 
 
-def test_create_todo_item_returns_200_status_and_json_response():
+def test_create_task_returns_200_status_and_json_response():
     response = client.post(
         "/todos", json={"id": 1, "title": "Task One", "complete": False}
     )
@@ -42,7 +42,7 @@ def test_create_todo_item_returns_200_status_and_json_response():
     }
 
 
-def test_create_todo_item2_returns_200_status_and_json_response():
+def test_create_task2_returns_200_status_and_json_response():
     response = client.post(
         "/todos", json={"id": 2, "title": "Task Two", "complete": False}
     )
@@ -54,13 +54,13 @@ def test_create_todo_item2_returns_200_status_and_json_response():
     }
 
 
-def test_create_existing_todo_returns_400_status_and_error():
+def test_create_existing_task_returns_400_status_and_error():
     response = client.post(
         "/todos", json={"id": 1, "title": "Task One", "complete": False}
     )
     assert response.status_code == 400
     assert response.json() == {
-        "detail": "To-do item with id 1 already exists",
+        "detail": "Task with id 1 already exists",
     }
 
 
@@ -81,7 +81,7 @@ def test_get_all_todos_returns_200_status_and_json_response():
     ]
 
 
-def test_get_todo_item_by_id_returns_200_status_and_correct_response():
+def test_get_task_by_id_returns_200_status_and_correct_response():
     response = client.get("/todos/2")
     assert response.status_code == 200
     assert response.json() == {
@@ -91,15 +91,15 @@ def test_get_todo_item_by_id_returns_200_status_and_correct_response():
     }
 
 
-def test_get_todo_item_by_inexistent_id_returns_404_status_and_error():
+def test_get_task_by_inexistent_id_returns_404_status_and_error():
     response = client.get("/todos/99")
     assert response.status_code == 404
     assert response.json() == {
-        "detail": "No to-do item with id 99 found",
+        "detail": "No task with id 99 found",
     }
 
 
-def test_update_todo_item_returns_200_status_and_correct_response():
+def test_update_task_returns_200_status_and_correct_response():
     response = client.put(
         "/todos/1",
         json={
@@ -116,7 +116,7 @@ def test_update_todo_item_returns_200_status_and_correct_response():
     }
 
 
-def test_update_todo_item_actually_updates_database():
+def test_update_task_actually_updates_database():
     response = client.get("/todos/1")
     assert response.status_code == 200
     assert response.json() == {
@@ -126,7 +126,7 @@ def test_update_todo_item_actually_updates_database():
     }
 
 
-def test_update_todo_item_inexistent_id_returns_404_status_and_error():
+def test_update_task_inexistent_id_returns_404_status_and_error():
     response = client.put(
         "/todos/99",
         json={
@@ -137,17 +137,17 @@ def test_update_todo_item_inexistent_id_returns_404_status_and_error():
     )
     assert response.status_code == 404
     assert response.json() == {
-        "detail": "No to-do item with id 99 found",
+        "detail": "No task with id 99 found",
     }
 
 
-def test_delete_todo_item_returns_200_status_and_ok_response():
+def test_delete_task_returns_200_status_and_ok_response():
     response = client.delete("/todos/2")
     assert response.status_code == 200
     assert response.json() == {"OK": True}
 
 
-def test_delete_todo_item_actually_deletes_from_database():
+def test_delete_task_actually_deletes_from_database():
     response = client.get("/todos")
     assert response.json() == [
         {
@@ -158,7 +158,7 @@ def test_delete_todo_item_actually_deletes_from_database():
     ]
 
 
-def test_delete_todo_item_inexistent_id_returns_404_status_and_error():
+def test_delete_task_inexistent_id_returns_404_status_and_error():
     response = client.delete("/todos/99")
     assert response.status_code == 404
-    assert response.json() == {"detail": "No to-do item with id 99 found"}
+    assert response.json() == {"detail": "No task with id 99 found"}
