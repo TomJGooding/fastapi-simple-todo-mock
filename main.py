@@ -2,7 +2,9 @@ from fastapi import Depends, FastAPI, HTTPException
 from mongita import MongitaClientDisk
 from pydantic import BaseModel
 
-app = FastAPI()
+description = "The To-Do List API allows you to add, delete and update tasks"
+
+app = FastAPI(title="To-Do List API", description=description)
 
 db_client = MongitaClientDisk()
 db = db_client.db
