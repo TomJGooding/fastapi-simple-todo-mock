@@ -52,7 +52,7 @@ uvicorn main:app
 
 ### Interact From the Browser (Swagger UI)
 
-[Swagger UI](https://github.com/swagger-api/swagger-ui) is a browser-based tool for interacting with REST APIs, and FastAPI creates this iterface for the API automatically.
+[Swagger UI](https://github.com/swagger-api/swagger-ui) is a browser-based tool for interacting with REST APIs, and FastAPI creates this user interface for the API automatically.
 
 Open your browser at [http://localhost:8000/docs](http://localhost:8000/docs)
 
