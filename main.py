@@ -68,3 +68,13 @@ async def update_todo_item(
         )
     todos.replace_one({"id": todo_id}, updated_todo.dict())
     return updated_todo
+
+
+@app.delete("/todos/{todo_id}")
+async def delete_todo_item(todo_id: int, todos=Depends(get_todos_db)):
+    delete_result = todos.delete_one({"id": todo_id})
+    if delete_result.deleted_count == 0:
+        raise HTTPException(
+            status_code=404, detail=f"No to-do item with id {todo_id} found"
+        )
+    return {"OK": True}

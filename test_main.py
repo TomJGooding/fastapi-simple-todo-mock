@@ -139,3 +139,26 @@ def test_update_todo_item_inexistent_id_returns_404_status_and_error():
     assert response.json() == {
         "detail": "No to-do item with id 99 found",
     }
+
+
+def test_delete_todo_item_returns_200_status_and_ok_response():
+    response = client.delete("/todos/2")
+    assert response.status_code == 200
+    assert response.json() == {"OK": True}
+
+
+def test_delete_todo_item_actually_deletes_from_database():
+    response = client.get("/todos")
+    assert response.json() == [
+        {
+            "id": 1,
+            "title": "UPDATED Task One",
+            "complete": True,
+        }
+    ]
+
+
+def test_delete_todo_item_inexistent_id_returns_404_status_and_error():
+    response = client.delete("/todos/99")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "No to-do item with id 99 found"}
